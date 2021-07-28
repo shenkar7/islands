@@ -7,27 +7,25 @@ const MatrixVisual = props => {
     const colors = {};
 
     // set cells size depending on the larger between row or col number
-    const MAX = Math.max(props.matrix.length, props.matrix[0].length)
+    const numberOfCells = Math.max(props.matrix.length, props.matrix[0].length)
     
     let size = 'large';
 
-    if(MAX > 50)
-        size = 'medium-large';
-
-    if(MAX > 70)
-        size = 'medium';
-
-    if(MAX > 100)
-        size = 'medium-small';
-
-    if(MAX > 170)
+    if (numberOfCells > 170){
         size = 'small';
+    } else if (numberOfCells > 100){
+        size = 'medium-small';
+    } else if(numberOfCells > 70){
+        size = 'medium';
+    } else if(numberOfCells > 50){
+        size = 'medium-large';
+    }
 
     // create cells with correct style
-    for (let r = 0; r < props.matrix.length; r++){
+    for (let rowIndex = 0; rowIndex < props.matrix.length; rowIndex++){
         const row = [];
 
-        for(let c = 0; c < props.matrix[0].length; c++){
+        for(let colIndex = 0; colIndex < props.matrix[0].length; colIndex++){
             
             // style of simple "false" cell
             const cellVisualProps = {"size": size};
@@ -35,33 +33,33 @@ const MatrixVisual = props => {
             // add onClick option to drawable cell
             if(props.drawable){
                 cellVisualProps["drawable"] = true;
-                cellVisualProps["cellClickHandler"] = (() => props.drawable(r, c));
+                cellVisualProps["cellClickHandler"] = (() => props.drawable(rowIndex, colIndex));
             }
 
             // add default color to "true" cell
-            if(props.matrix[r][c] === true) 
+            if(props.matrix[rowIndex][colIndex] === true) 
                 cellVisualProps["full"] = true;
             
             // add color if cell belongs to an island
-            if(!([true, false].includes(props.matrix[r][c]))) {
+            if(!([true, false].includes(props.matrix[rowIndex][colIndex]))) {
                 
                 // if first cell of the island, create a random color
-                if(!(props.matrix[r][c] in colors)){
+                if(!(props.matrix[rowIndex][colIndex] in colors)){
                     const color = [
                         Math.floor(Math.random() * 150) + 50,
                         Math.floor(Math.random() * 150) + 50,
                         Math.floor(Math.random() * 150) + 50
                     ];
-                    colors[props.matrix[r][c]] = color;
+                    colors[props.matrix[rowIndex][colIndex]] = color;
                 }
 
-                cellVisualProps["color"] = colors[props.matrix[r][c]];
+                cellVisualProps["color"] = colors[props.matrix[rowIndex][colIndex]];
             }
             
-            row.push(<td key={r + "" + c}><CellVisual {...cellVisualProps}/></td>);
+            row.push(<td key={`${rowIndex}  ${colIndex}`}><CellVisual {...cellVisualProps}/></td>);
         }
         
-        matrixBody.push(<tr key={r}>{row}</tr>);
+        matrixBody.push(<tr key={rowIndex}>{row}</tr>);
     }
 
     return (

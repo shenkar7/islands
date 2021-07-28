@@ -19,7 +19,11 @@ const MatrixPage = props => {
     }, [props.n, props.m, props.type]);
 
     const solveHandler = () => {
-        setSolved(findIslands(matrix));
+        const solution = findIslands(matrix);
+        console.log(solution);
+
+        setSolved(solution.islandsNum);
+        setMatrix(solution.matrix);
     }
 
     //  handle cell clicks in draw mode by toggling true/false

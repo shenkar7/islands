@@ -1,4 +1,5 @@
 import './App.css';
+import Header from './components/Header/Header';
 import Main from './containers/Main/Main';
 
 function App() {
@@ -8,15 +9,9 @@ function App() {
         26/07/21 - Yariv Shenkar
       </div>
 
-      <header className="App-header">
-        <span className="attenti">
-          <span className="attenti-first-letter">a</span>
-          ttenti
-        </span>
-        exercise
-      </header>
-
+      <Header/>
       <Main/>
+      
     </div>
   );
 }

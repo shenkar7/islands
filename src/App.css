@@ -5,22 +5,3 @@
 .App .name-and-date{
   padding: 0.5em 0.5em 0 0.5em;
 }
-
-.App-header {
-  text-align: center;
-  font-size: calc(10px + 2vmin);
-}
-
-.App .App-header {
-  text-align: center;
-  font-weight: bold;
-}
-
-.App .App-header .attenti {
-  margin-right: 10px;
-  font-size: 2em;
-}
-
-.App .App-header .attenti .attenti-first-letter{
-  color: red;
-}

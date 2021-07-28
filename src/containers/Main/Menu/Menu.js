@@ -15,8 +15,10 @@ const Menu = props => {
             return;
         }
         
-        const n = parseInt(textInput.split(", ")[0]);
-        const m = parseInt(textInput.split(", ")[1]);
+        const splitedInput = textInput.split(", ");
+
+        const n = parseInt(splitedInput[0]);
+        const m = parseInt(splitedInput[1]);
         props.buttonClickHandler(n, m, value);
     }
 
