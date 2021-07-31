@@ -7,4 +7,4 @@ The program uses canvas element to display large tables.
 
 
 <div style="text-align:center"><img src="https://user-images.githubusercontent.com/57297876/127723940-664ad781-dc7d-4510-b0cf-67e547ffce5b.JPG" /></div>
-![islands](https://user-images.githubusercontent.com/57297876/127723940-664ad781-dc7d-4510-b0cf-67e547ffce5b.JPG)
+
