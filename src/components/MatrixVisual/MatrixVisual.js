@@ -1,74 +1,39 @@
-import './MatrixVisual.css';
-import CellVisual from './CellVisual/CellVisual';
+import React, {useEffect, useRef, useState} from 'react';
+import {getMatrixProperties, getCellRowColFromCanvasXY} from './functions';
+import {drawTable} from './drawTable';
 
 const MatrixVisual = props => {
+
+    const [eventListenerAdded, setEventListenerAdded] = useState(false);
+
+    const [cellSize, canvasWidth, canvasHeight] = getMatrixProperties(props.matrix).slice(-3);;
     
-    const matrixBody = [];
-    const colors = {};
+    const canvasRef = useRef(null);
 
-    // set cells size depending on the larger between row or col number
-    const numberOfCells = Math.max(props.matrix.length, props.matrix[0].length)
-    
-    let size = 'large';
+    // on each matrix update by click, draw the table again
+    useEffect(() => {
 
-    if (numberOfCells > 170){
-        size = 'small';
-    } else if (numberOfCells > 100){
-        size = 'medium-small';
-    } else if(numberOfCells > 70){
-        size = 'medium';
-    } else if(numberOfCells > 50){
-        size = 'medium-large';
-    }
+        const canvas = canvasRef.current;
+        const context = canvas.getContext('2d');
 
-    // create cells with correct style
-    for (let rowIndex = 0; rowIndex < props.matrix.length; rowIndex++){
-        const row = [];
+        // in draw mode, add only once a click event listener to the canvas
+        if (props.cellClickHandler && !eventListenerAdded) {
+            setEventListenerAdded(true);
+            canvas.addEventListener('click', event => {
+                const rect = canvas.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
 
-        for(let colIndex = 0; colIndex < props.matrix[0].length; colIndex++){
-            
-            // style of simple "false" cell
-            const cellVisualProps = {"size": size};
-
-            // add onClick option to drawable cell
-            if(props.drawable){
-                cellVisualProps["drawable"] = true;
-                cellVisualProps["cellClickHandler"] = (() => props.drawable(rowIndex, colIndex));
-            }
-
-            // add default color to "true" cell
-            if(props.matrix[rowIndex][colIndex] === true) 
-                cellVisualProps["full"] = true;
-            
-            // add color if cell belongs to an island
-            if(!([true, false].includes(props.matrix[rowIndex][colIndex]))) {
-                
-                // if first cell of the island, create a random color
-                if(!(props.matrix[rowIndex][colIndex] in colors)){
-                    const color = [
-                        Math.floor(Math.random() * 150) + 50,
-                        Math.floor(Math.random() * 150) + 50,
-                        Math.floor(Math.random() * 150) + 50
-                    ];
-                    colors[props.matrix[rowIndex][colIndex]] = color;
-                }
-
-                cellVisualProps["color"] = colors[props.matrix[rowIndex][colIndex]];
-            }
-            
-            row.push(<td key={`${rowIndex}  ${colIndex}`}><CellVisual {...cellVisualProps}/></td>);
+                const [cellRow, cellCol] = getCellRowColFromCanvasXY(x, y, cellSize);
+                props.cellClickHandler(cellRow, cellCol);
+            });
         }
-        
-        matrixBody.push(<tr key={rowIndex}>{row}</tr>);
-    }
 
-    return (
-        <table className="table">
-            <tbody>
-                {matrixBody}
-            </tbody>
-        </table>
-    );
+        drawTable(context, props.matrix);
+
+    }, [cellSize, props, eventListenerAdded])
+
+    return <canvas ref={canvasRef} width={canvasWidth} height={canvasHeight}/>
 }
 
 export default MatrixVisual;

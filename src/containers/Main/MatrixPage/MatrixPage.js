@@ -20,22 +20,21 @@ const MatrixPage = props => {
 
     const solveHandler = () => {
         const solution = findIslands(matrix);
-        console.log(solution);
 
         setSolved(solution.islandsNum);
         setMatrix(solution.matrix);
     }
 
     //  handle cell clicks in draw mode by toggling true/false
-    let drawableHandler;
+    let cellClickHandler;
 
     if(props.type === "draw")   {
-        drawableHandler = (x, y) => {
+        cellClickHandler = (r, c) => {
             setMatrix(prevMatrix => {
                 const newMatrix = [...prevMatrix];
-                const newRow = [...newMatrix[x]];
-                newRow[y] = !newRow[y];
-                newMatrix[x] = newRow;
+                const newRow = [...newMatrix[r]];
+                newRow[c] = !newRow[c];
+                newMatrix[r] = newRow;
                 return newMatrix;
             });
         }
@@ -56,7 +55,7 @@ const MatrixPage = props => {
     if(matrix){
         content = (
             <React.Fragment>
-                <MatrixVisual matrix={matrix} drawable={drawableHandler}/>
+                <MatrixVisual matrix={matrix} cellClickHandler={cellClickHandler}/>
                 {solvedContent}
             </React.Fragment>
         );
